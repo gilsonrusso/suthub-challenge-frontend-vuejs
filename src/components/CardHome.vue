@@ -7,7 +7,7 @@
     <v-card-subtitle class="pb-0"> {{ data.subTitle }}</v-card-subtitle>
 
     <v-card-actions>
-      <v-btn color="orange" text> {{ data.nameButton }} </v-btn>
+      <v-btn color="white" text> {{ data.nameButton }} </v-btn>
     </v-card-actions>
   </v-card>
 </template>
