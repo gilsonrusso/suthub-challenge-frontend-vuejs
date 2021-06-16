@@ -1,15 +1,13 @@
 <template>
-  <div id="app">
-    <h2>Bem vindos!</h2>
-  </div>
+  <v-app>
+    <v-main> 
+      <h3>Bem vindos!</h3>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
 export default {
   name: "App",
-  components: {},
 };
 </script>
-
-<style>
-</style>
