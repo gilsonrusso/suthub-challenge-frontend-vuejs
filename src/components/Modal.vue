@@ -48,9 +48,10 @@
               type="text"
               class="form-control"
               id="inputCPF"
-              placeholder="XXX.XXX.XXX-XX"
-              minlength="11"
-              maxlength="11"
+              v-mask="'###.###.###-##'"
+              placeholder="999.999.999-99"
+              minlength="14"
+              maxlength="14"
               required
             />
           </div>
@@ -66,9 +67,9 @@
               type="text"
               class="form-control"
               id="inputIncome"
-              placeholder="00.00"
-              minlength="1"
-              maxlength="11"
+              v-mask="'#####.##'"
+              minlength="6"
+              maxlength="10"
               required
             />
           </div>
@@ -82,10 +83,11 @@
             <input
               v-model="data.address.code"
               type="text"
+              v-mask="'XXXXX-XXX'"
               class="form-control"
               id="inputCode"
-              placeholder="XXXXX-XXX"
-              minlength="8"
+              placeholder="69000-000"
+              minlength="9"
               maxlength="9"
               required
             />
@@ -208,7 +210,9 @@
 </template>
 
 <script>
+import { mask } from "vue-the-mask";
 export default {
+  directives: { mask },
   name: "form-pets",
   props: ["data", "typeOf", "breeds"],
   data() {
