@@ -1,0 +1,278 @@
+<template>
+  <div class="overlay">
+    <form @submit.prevent="savePet" class="form">
+      <div class="header">Novo Cadastro</div>
+      <v-divider></v-divider>
+      <!-- FULL NAME -->
+      <div class="row">
+        <div class="col-7 py-1">
+          <div class="mb-3">
+            <label for="inputName" class="input-label">Nome completo</label>
+            <input
+              v-model="data.name"
+              type="text"
+              class="form-control"
+              id="inputName"
+              placeholder="Nome completo"
+              minlength="15"
+              maxlength="40"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="col-5 py-1">
+          <div class="mb-3">
+            <label for="inputBirthDate" class="input-label"
+              >Data Nascimento</label
+            >
+            <input
+              v-model="data.birthDate"
+              type="date"
+              class="form-control"
+              id="inputBirthDate"
+              minlength="18"
+              maxlength="65"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <!-- BIRTHDATE AND CPF -->
+      <div class="row">
+        <div class="col-7 py-1">
+          <div class="mb-1">
+            <label for="inputCPF" class="input-label">CPF</label>
+            <input
+              v-model="data.cpf"
+              type="text"
+              class="form-control"
+              id="inputCPF"
+              placeholder="XXX.XXX.XXX-XX"
+              minlength="11"
+              maxlength="11"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-5 py-1">
+          <label for="inputIncome" class="input-label">Renda Mensal</label>
+          <div class="mb-1 input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">R$:</span>
+            </div>
+            <input
+              v-model="data.income"
+              type="text"
+              class="form-control"
+              id="inputIncome"
+              placeholder="00.00"
+              minlength="1"
+              maxlength="11"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <!-- ADDRESS -->
+      <div class="row">
+        <div class="col-4 py-1">
+          <div class="mb-3">
+            <label for="inputZipcode" class="input-label">CEP</label>
+            <input
+              v-model="data.address.zipCode"
+              type="text"
+              class="form-control"
+              id="inputZipeCode"
+              placeholder="XXXXX-XXX"
+              minlength="8"
+              maxlength="9"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-8 py-1">
+          <div class="mb-3">
+            <label for="inputStreet" class="input-label">Rua</label>
+            <input
+              v-model="data.address.street"
+              type="text"
+              class="form-control"
+              id="inputStreet"
+              placeholder="Nome da rua"
+              minlength="10"
+              maxlength="40"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 py-1">
+          <div class="mb-3">
+            <label for="inputDistrict" class="input-label">Rua</label>
+            <input
+              v-model="data.address.district"
+              type="text"
+              class="form-control"
+              id="inputDistrict"
+              placeholder="Bairro"
+              minlength="10"
+              maxlength="40"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-6 py-1">
+          <div class="mb-3">
+            <label for="inputCity" class="input-label">Cidade</label>
+            <input
+              v-model="data.address.city"
+              type="text"
+              class="form-control"
+              id="inputCity"
+              placeholder="Cidade"
+              minlength="10"
+              maxlength="40"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-2 py-1">
+          <div class="mb-3">
+            <label for="inputState" class="input-label">Estado</label>
+            <input
+              v-model="data.address.state"
+              type="text"
+              class="form-control"
+              id="inputState"
+              placeholder="UF"
+              minlength="2"
+              maxlength="2"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <!-- KIND OF PET -->
+      <div class="row">
+        <div class="col-3 py-1">
+          <div class="mb-1">
+            <label for="inputKindOf" class="input-label">Tipo de Pet</label>
+            <v-select
+              v-model="data.typeOf"
+              :items="typeOf"
+              label="Escolha"
+              dense
+              solo
+            ></v-select>
+          </div>
+        </div>
+        <div class="col-5 py-1">
+          <div class="mb-1">
+            <label for="inputTypeOf" class="input-label">Raça do Pet</label>
+            <v-select
+              :disabled="!data.typeOf"
+              v-model="data.breed"
+              :items="breeds"
+              label="Escolha"
+              dense
+              solo
+            ></v-select>
+          </div>
+        </div>
+        <div class="col-4 py-1" v-if="data.breed === 'Outro'">
+          <div class="mb-1">
+            <label for="inputOtheBreed" class="input-label">Qual a Raça?</label>
+            <input
+              v-model="data.otherBreed"
+              type="text"
+              class="form-control"
+              id="inputOtherBreed"
+              placeholder="Digite a Raça"
+              minlength="15"
+              maxlength="25"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <v-divider></v-divider>
+      <div class="footer">
+        <button @click="cancel" class="btn btn-cancel">Cancel</button>
+        <button type="submit" class="btn btn-save">Save</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "form-pets",
+  props: ["data", "typeOf", "breeds"],
+  data() {
+    return {};
+  },
+  methods: {
+    savePet() {
+      this.$emit("save");
+    },
+    cancel() {
+      this.$emit("cancel");
+    },
+  },
+};
+</script>
+
+<style scoped>
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+}
+
+.form {
+  height: 35rem;
+  width: 30rem;
+  min-width: 360px;
+  background-color: #fff;
+  padding: 15px;
+}
+
+.header {
+  font-weight: bold;
+}
+.input-label {
+  font-size: 0.7rem;
+  color: var(--text-color);
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer .btn {
+  width: 6.25rem;
+}
+
+.btn {
+  color: #fff;
+}
+.btn-save {
+  background-color: var(--second-color);
+}
+.btn-cancel {
+  background-color: var(--text-color);
+}
+.btn:hover {
+  opacity: 90%;
+}
+</style>
