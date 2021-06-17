@@ -18,9 +18,8 @@
 </template>
 
 <script>
-import Modal from "../components/Modal";
-// import axios from "axios";
-import { search } from "../services/cepServices";
+import Modal from "../../components/Modal";
+import { search } from "../../services/cepServices";
 export default {
   name: "pets-page",
   components: { Modal },

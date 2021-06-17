@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import CardHome from "../components/CardHome.vue";
+import CardHome from "../../components/CardHome.vue";
 export default {
   name: "home",
   components: { CardHome },

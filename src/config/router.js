@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Home from "../pages/Home";
-import Pets from "../pages/Pets";
-import Region from "../pages/RegionBloc";
+import Home from "../pages/Home/Home";
+import Pets from "../pages/Pets/Pets";
+import Region from "../pages/Regions/RegionBloc";
 
 Vue.use(VueRouter);
 
