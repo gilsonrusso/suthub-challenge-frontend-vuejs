@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="menu">
       <button @click="showModal = !showModal" class="btn">
         Novo Cadastro Pet
