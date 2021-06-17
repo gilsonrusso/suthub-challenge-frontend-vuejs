@@ -76,33 +76,37 @@
       </div>
       <!-- ADDRESS -->
       <div class="row">
-        <div class="col-4 py-1">
-          <div class="mb-3">
-            <label for="inputZipcode" class="input-label">CEP</label>
+        <div class="col-5 py-1">
+          <label for="inputCode" class="input-label">CEP</label>
+          <div class="mb-3 input-group">
             <input
-              v-model="data.address.zipCode"
+              v-model="data.address.code"
               type="text"
               class="form-control"
-              id="inputZipeCode"
+              id="inputCode"
               placeholder="XXXXX-XXX"
               minlength="8"
               maxlength="9"
               required
             />
+            <div class="input-group-prepend">
+              <button @click="search" class="input-group-text">
+                <i class="fas fa-search text-success fa-1x"></i>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="col-8 py-1">
+        <div class="col-7 py-1">
           <div class="mb-3">
             <label for="inputStreet" class="input-label">Rua</label>
             <input
-              v-model="data.address.street"
+              v-model="data.address.address"
               type="text"
               class="form-control"
               id="inputStreet"
               placeholder="Nome da rua"
-              minlength="10"
-              maxlength="40"
               required
+              readonly
             />
           </div>
         </div>
@@ -110,16 +114,15 @@
       <div class="row">
         <div class="col-4 py-1">
           <div class="mb-3">
-            <label for="inputDistrict" class="input-label">Rua</label>
+            <label for="inputDistrict" class="input-label">Bairro</label>
             <input
               v-model="data.address.district"
               type="text"
               class="form-control"
               id="inputDistrict"
               placeholder="Bairro"
-              minlength="10"
-              maxlength="40"
               required
+              readonly
             />
           </div>
         </div>
@@ -132,9 +135,8 @@
               class="form-control"
               id="inputCity"
               placeholder="Cidade"
-              minlength="10"
-              maxlength="40"
               required
+              readonly
             />
           </div>
         </div>
@@ -147,9 +149,8 @@
               class="form-control"
               id="inputState"
               placeholder="UF"
-              minlength="2"
-              maxlength="2"
               required
+              readonly
             />
           </div>
         </div>
@@ -220,6 +221,9 @@ export default {
     cancel() {
       this.$emit("cancel");
     },
+    search() {
+      this.$emit("search");
+    },
   },
 };
 </script>
@@ -274,5 +278,11 @@ export default {
 }
 .btn:hover {
   opacity: 90%;
+}
+
+.fas {
+  height: 24px;
+  display: flex;
+  align-items: center;
 }
 </style>
