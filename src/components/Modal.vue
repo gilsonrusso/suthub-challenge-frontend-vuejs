@@ -14,9 +14,10 @@
               class="form-control"
               id="inputName"
               placeholder="Nome completo"
-              minlength="15"
-              maxlength="40"
+              minlength="8"
+              maxlength="20"
               required
+              :class="nameValid"
             />
           </div>
         </div>
@@ -92,8 +93,13 @@
               required
             />
             <div class="input-group-prepend">
-              <button @click="search" class="input-group-text">
-                <i class="fas fa-search text-success fa-1x"></i>
+              <button
+                :disabled="codeValid"
+                :class="codeValid ? 'btn-second' : 'btn-success'"
+                class="input-group-text"
+                @click="search"
+              >
+                <i class="fas fa-search text-white fa-1x"></i>
               </button>
             </div>
           </div>
@@ -211,12 +217,15 @@
 
 <script>
 import { mask } from "vue-the-mask";
+import { isValidCPF } from "../config/validatorCpf";
 export default {
   directives: { mask },
   name: "form-pets",
   props: ["data", "typeOf", "breeds"],
   data() {
-    return {};
+    return {
+      nameIsValid: false,
+    };
   },
   methods: {
     savePet() {
@@ -227,6 +236,22 @@ export default {
     },
     search() {
       this.$emit("search");
+    },
+    checkName() {
+      return this.data.name.length > 8
+        ? (this.nameIsValid = false)
+        : (this.nameIsValid = true);
+    },
+    checkCPF() {
+      isValidCPF(this.data.cpf)
+    }
+  },
+  computed: {
+    nameValid: function () {
+      return this.checkName();
+    },
+    codeValid: function () {
+      return this.data.address.code.length < 9 ? true : false;
     },
   },
 };
@@ -288,5 +313,11 @@ export default {
   height: 24px;
   display: flex;
   align-items: center;
+}
+
+.alert {
+  padding: 0;
+  font-size: 0.6rem;
+  color: red;
 }
 </style>
