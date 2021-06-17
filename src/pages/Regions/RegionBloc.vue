@@ -3,14 +3,9 @@
     <Modal v-if="showModal">
       <FormBrazil @cancel="cancel" :data="brazilData" />
     </Modal>
-    <div class="row">
-      <h3>Region Bloc</h3>
-    </div>
-    <div class="row">
-      <div>
-        <button @click="showModal = !showModal" class="btn">Brasil</button>
-      </div>
-    </div>
+    <v-card-title class="py-0">Bloco Regional</v-card-title>
+    <v-divider></v-divider>
+    <button @click="showModal = !showModal" class="btn">Brasil</button>
   </div>
 </template>
 

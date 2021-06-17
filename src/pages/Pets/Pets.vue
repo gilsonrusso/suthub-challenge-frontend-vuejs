@@ -1,10 +1,5 @@
 <template>
   <div class="container">
-    <div class="menu">
-      <button @click="showModal = !showModal" class="btn">
-        Novo Cadastro Pet
-      </button>
-    </div>
     <Modal v-if="showModal">
       <Form
         @save="create"
@@ -15,6 +10,11 @@
         :breeds="pet.typeOf === 'Gato' ? catBreeds : dogBreeds"
       />
     </Modal>
+    <v-card-title class="py-0">Pets</v-card-title>
+    <v-divider></v-divider>
+    <button @click="showModal = !showModal" class="btn">
+      Novo Cadastro Pet
+    </button>
   </div>
 </template>
 
