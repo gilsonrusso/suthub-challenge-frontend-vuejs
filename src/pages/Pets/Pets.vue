@@ -5,24 +5,26 @@
         Novo Cadastro Pet
       </button>
     </div>
-    <Modal
-      v-if="showModal"
-      :data="pet"
-      @save="create"
-      @cancel="cancel"
-      @search="searchCode"
-      :typeOf="typeOfPet"
-      :breeds="pet.typeOf === 'Gato' ? catBreeds : dogBreeds"
-    />
+    <Modal v-if="showModal">
+      <Form
+        @save="create"
+        @cancel="cancel"
+        :data="pet"
+        @search="searchCode"
+        :typeOf="typeOfPet"
+        :breeds="pet.typeOf === 'Gato' ? catBreeds : dogBreeds"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import Modal from "../../components/Modal";
+import Form from "./Form.vue";
 import { search } from "../../services/cepServices";
 export default {
   name: "pets-page",
-  components: { Modal },
+  components: { Modal, Form },
   data() {
     return {
       showModal: false,
