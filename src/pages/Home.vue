@@ -24,6 +24,7 @@ export default {
           title: "Cuidando com carinho!",
           subTitle: "PET",
           nameButton: "Cadastre Aqui",
+          PathTo: "/pets",
         },
         {
           id: 1,
@@ -31,6 +32,7 @@ export default {
           title: "Globalização.",
           subTitle: "REGION BLOCK",
           nameButton: "Veja Aqui",
+          PathTo: "/regions",
         },
       ],
     };

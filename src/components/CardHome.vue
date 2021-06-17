@@ -7,7 +7,9 @@
     <v-card-subtitle class="pb-0"> {{ data.subTitle }}</v-card-subtitle>
 
     <v-card-actions>
-      <v-btn color="white" text> {{ data.nameButton }} </v-btn>
+      <v-btn :to="data.PathTo" color="white" text>
+        {{ data.nameButton }}
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -30,8 +32,12 @@ export default {
 }
 .v-card__actions button {
   width: 100%;
+}
+.v-btn {
+  width: 100%;
   background-color: var(--second-color);
 }
+
 image {
   max-width: 300px;
 }
