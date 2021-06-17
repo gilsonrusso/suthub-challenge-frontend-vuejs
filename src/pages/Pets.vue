@@ -10,6 +10,7 @@
       :data="pet"
       @save="create"
       @cancel="cancel"
+      @search="searchCode"
       :typeOf="typeOfPet"
       :breeds="pet.typeOf === 'Gato' ? catBreeds : dogBreeds"
     />
@@ -18,6 +19,8 @@
 
 <script>
 import Modal from "../components/Modal";
+// import axios from "axios";
+import { search } from "../services/cepServices";
 export default {
   name: "pets-page",
   components: { Modal },
@@ -28,14 +31,14 @@ export default {
         name: "",
         birthDate: "",
         cpf: "",
-        income:"1000,00",
+        income: "1000,00",
         address: {
-          zipCode: "",
-          street: "",
+          code: "",
+          address: "",
           district: "",
           city: "",
-          state: ""
-        }
+          state: "",
+        },
       },
       listPets: [],
       typeOfPet: ["Cão", "Gato"],
@@ -52,12 +55,34 @@ export default {
   },
   methods: {
     create() {
-      console.log(this.pet);
+      console.log(JSON.stringify(this.pet));
       this.listPets.push(this.pet);
       this.showModal = false;
+      this.resetPet();
     },
     cancel() {
-      (this.pet = {}), (this.showModal = false);
+      this.resetPet(), (this.showModal = false);
+    },
+    resetPet() {
+      this.pet = {
+        name: "",
+        birthDate: "",
+        cpf: "",
+        income: "1000,00",
+        address: {
+          code: "",
+          address: "",
+          district: "",
+          city: "",
+          state: "",
+        },
+      };
+    },
+    async searchCode() {
+      const result = await search(this.pet.address.code);
+      if (result.status == 200) {
+        this.pet.address = { ...result };
+      }
     },
   },
 };
