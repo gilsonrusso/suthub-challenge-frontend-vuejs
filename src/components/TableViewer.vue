@@ -18,6 +18,7 @@
       loading-text="Carregando... Por favor aguarde!"
       class="elevation-1"
       :search="search"
+      @click:row="clickedItem"
     ></v-data-table>
   </v-card>
 </template>
@@ -30,6 +31,14 @@ export default {
     return {
       search: "",
     };
+  },
+  methods: {
+    clickedItem(item) {
+      let exists = Object.values(this.headers[1]).includes("Idioma");
+      if (exists) {
+        this.$emit("clicked", item);
+      }
+    },
   },
 };
 </script>

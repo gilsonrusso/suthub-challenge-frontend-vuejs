@@ -49,6 +49,7 @@
         :data="dataReceived"
         :headers="headers"
         :loading="loadingTable"
+        @clicked="rowClicked"
       />
     </v-row>
   </div>
@@ -153,6 +154,17 @@ export default {
         this.selectedBloc = "";
         this.searchName = "";
         this.dataReceived = result;
+        this.loadingTable = false;
+      }, 3000);
+    },
+    async rowClicked({ languages }) {
+      this.dataReceived = [];
+      this.loadingTable = true;
+      const data = await this.getByLanguage(languages[0].iso639_1);
+      setTimeout(() => {
+        this.selectedBloc = "";
+        this.searchName = "";
+        this.dataReceived = data;
         this.loadingTable = false;
       }, 3000);
     },
