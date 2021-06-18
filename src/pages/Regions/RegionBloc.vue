@@ -22,7 +22,6 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="4" lg="4" class="d-flex filter">
-        <!-- <span class="py-1 mr-1"><strong>Filtros:</strong></span> -->
         <v-select
           dense
           label="Escolha o bloco"
@@ -31,17 +30,17 @@
           :items="listRegionalBloc"
           item-text="name"
           item-value="value"
-          @change="getSelectedBloc"
+          @change="chooseBloc"
         ></v-select>
       </v-col>
     </v-row>
     <v-divider></v-divider>
-    <button @click="showModal = !showModal" class="btn">Brasil</button>
+    <button @click="getBrazilData" class="btn">Brasil</button>
 
     <v-row>
-      <TableRegional
+      <TableViewer
         v-if="selectedBloc"
-        :data="regionalBlocs"
+        :data="dataReceived"
         :headers="headers"
         :loading="loadingTable"
       />
@@ -51,20 +50,21 @@
 
 <script>
 import {
-  brazilInfo,
-  getRegionalBloc,
+  searchByRegionalBloc,
+  searchByLanguage,
+  searchByName,
 } from "../../services/restCountriesApiServices";
 import Modal from "../../components/Modal.vue";
 import FormBrazil from "./FormBrazil.vue";
-import TableRegional from "../../components/Table";
+import TableViewer from "../../components/TableViewer.vue";
 export default {
   name: "region-bloc",
-  components: { Modal, FormBrazil, TableRegional },
+  components: { Modal, FormBrazil, TableViewer },
   data() {
     return {
+      dataReceived: [],
       brazilData: "",
       selectedBloc: "",
-      regionalBlocs: [],
       loadingTable: false,
       headers: [
         { text: "Name", value: "name" },
@@ -92,14 +92,27 @@ export default {
     };
   },
   methods: {
-    async getBrazilInfo() {
-      const { data } = await brazilInfo();
-      this.brazilData = data;
+    async getByName(name) {
+      const { data } = await searchByName(name);
+      return data;
     },
-    async getSelectedBloc() {
-      this.regionalBlocs = [];
+    async getByLanguage(language) {
+      const { data } = await searchByLanguage(language);
+      return data;
+    },
+    async getByBloc(bloc) {
+      const { data } = await searchByRegionalBloc(bloc);
+      return data;
+    },
+    async getBrazilData() {
+      const data = await this.getByName("brazil");
+      this.brazilData = data;
+      this.showModal = !this.showModal;
+    },
+    async chooseBloc() {
+      this.dataReceived = [];
       this.loadingTable = true;
-      const { data } = await getRegionalBloc(this.selectedBloc);
+      const data = await this.getByBloc(this.selectedBloc);
 
       const dataDTO = data.map((element) => {
         return {
@@ -109,16 +122,13 @@ export default {
       });
 
       setTimeout(() => {
+        this.dataReceived = dataDTO;
         this.loadingTable = false;
-        this.regionalBlocs = dataDTO;
       }, 3000);
     },
     cancel() {
       this.showModal = false;
     },
-  },
-  created() {
-    this.getBrazilInfo();
   },
 };
 </script>
