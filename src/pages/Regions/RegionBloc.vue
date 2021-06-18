@@ -39,22 +39,12 @@
     <button @click="showModal = !showModal" class="btn">Brasil</button>
 
     <v-row>
-      <v-simple-table fixed-header height="300px">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Nome</th>
-              <th class="text-left">Coordenadas</th>
-            </tr>
-          </thead>
-          <tbody v-for="item in regionalBlocs" :key="item.name">
-            <tr v-for="(name, latlng,index) in item" :key="index">
-              <td>{{ name }}</td>
-              <td>{{ item.latlng }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
+      <TableRegional
+        v-if="selectedBloc"
+        :data="regionalBlocs"
+        :headers="headers"
+        :loading="loadingTable"
+      />
     </v-row>
   </div>
 </template>
@@ -66,14 +56,20 @@ import {
 } from "../../services/restCountriesApiServices";
 import Modal from "../../components/Modal.vue";
 import FormBrazil from "./FormBrazil.vue";
+import TableRegional from "../../components/Table";
 export default {
   name: "region-bloc",
-  components: { Modal, FormBrazil },
+  components: { Modal, FormBrazil, TableRegional },
   data() {
     return {
       brazilData: "",
       selectedBloc: "",
       regionalBlocs: [],
+      loadingTable: false,
+      headers: [
+        { text: "Name", value: "name" },
+        { text: "coordenadas", value: "latlng" },
+      ],
       showModal: false,
       listRegionalBloc: [
         { value: "EU", name: "European Union" },
@@ -101,14 +97,21 @@ export default {
       this.brazilData = data;
     },
     async getSelectedBloc() {
+      this.regionalBlocs = [];
+      this.loadingTable = true;
       const { data } = await getRegionalBloc(this.selectedBloc);
 
       const dataDTO = data.map((element) => {
-        return { name: element.name, latlng: element.latlng };
+        return {
+          name: element.name,
+          latlng: element.latlng,
+        };
       });
 
-      console.log(dataDTO);
-      this.regionalBlocs = dataDTO;
+      setTimeout(() => {
+        this.loadingTable = false;
+        this.regionalBlocs = dataDTO;
+      }, 3000);
     },
     cancel() {
       this.showModal = false;
