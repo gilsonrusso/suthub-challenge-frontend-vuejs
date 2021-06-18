@@ -12,7 +12,7 @@
             </tr>
           </thead>
           <tbody v-for="item in data" :key="item.name">
-            <tr v-for="(value, name) in item" :key="value.numericCode">
+            <tr v-for="(value, name, index) in item" :key="index">
               <td>{{ name }}</td>
               <td>{{ value }}</td>
             </tr>
