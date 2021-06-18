@@ -10,7 +10,13 @@
         :breeds="pet.typeOf === 'Gato' ? catBreeds : dogBreeds"
       />
     </Modal>
-    <v-card-title class="py-0">Pets</v-card-title>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">
+          Pets
+        </li>
+      </ol>
+    </nav>
     <v-divider></v-divider>
     <button @click="showModal = !showModal" class="btn">
       Novo Cadastro Pet
