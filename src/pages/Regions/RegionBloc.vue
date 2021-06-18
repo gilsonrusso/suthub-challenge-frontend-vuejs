@@ -74,10 +74,7 @@ export default {
       selectedBloc: "",
       searchName: "",
       loadingTable: false,
-      headers: [
-        { text: "Name", value: "name" },
-        { text: "coordenadas", value: "latlng" },
-      ],
+      headers: [],
       showModal: false,
       listRegionalBloc: [
         { value: "EU", name: "European Union" },
@@ -118,6 +115,13 @@ export default {
       this.showModal = !this.showModal;
     },
     async chooseBloc() {
+      this.searchName = "";
+      this.showTable = true;
+      this.headers = [
+        { text: "Name", value: "name" },
+        { text: "coordenadas", value: "latlng" },
+      ];
+
       this.dataReceived = [];
       this.loadingTable = true;
       const data = await this.getByBloc(this.selectedBloc);
@@ -140,7 +144,13 @@ export default {
       this.showTable = true;
       const result = await this.getByName(this.searchName);
 
+      this.headers = [
+        { text: "Nome", value: "name" },
+        { text: "Idioma", value: "languages[0].name" },
+      ];
+
       setTimeout(() => {
+        this.selectedBloc = "";
         this.searchName = "";
         this.dataReceived = result;
         this.loadingTable = false;
