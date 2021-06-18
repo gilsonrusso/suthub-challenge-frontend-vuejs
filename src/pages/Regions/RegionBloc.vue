@@ -14,16 +14,22 @@
 
     <v-row class="d-flex justify-content-end">
       <v-col cols="12" xs="12" sm="12" md="3" lg="3" class="search">
-        <v-text-field
-          dense
-          outlined
-          label="Busque por nomes"
-          append-icon="mdi-magnify"
-        ></v-text-field>
+        <v-card class="pa-0 search-input" flat>
+          <v-toolbar dense floating>
+            <v-text-field
+              hide-details
+              single-line
+              label="Busca por nome"
+              v-model="searchName"
+            ></v-text-field>
+            <v-btn :disabled="searchName == '' ? true : false" icon>
+              <v-icon @click="getSearchName">mdi-magnify</v-icon>
+            </v-btn>
+          </v-toolbar>
+        </v-card>
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="4" lg="4" class="d-flex filter">
         <v-select
-          dense
           label="Escolha o bloco"
           solo
           v-model="selectedBloc"
@@ -39,7 +45,7 @@
 
     <v-row>
       <TableViewer
-        v-if="selectedBloc"
+        v-if="showTable"
         :data="dataReceived"
         :headers="headers"
         :loading="loadingTable"
@@ -64,7 +70,9 @@ export default {
     return {
       dataReceived: [],
       brazilData: "",
+      showTable: false,
       selectedBloc: "",
+      searchName: "",
       loadingTable: false,
       headers: [
         { text: "Name", value: "name" },
@@ -126,6 +134,18 @@ export default {
         this.loadingTable = false;
       }, 3000);
     },
+    async getSearchName() {
+      this.dataReceived = [];
+      this.loadingTable = true;
+      this.showTable = true;
+      const result = await this.getByName(this.searchName);
+
+      setTimeout(() => {
+        this.searchName = "";
+        this.dataReceived = result;
+        this.loadingTable = false;
+      }, 3000);
+    },
     cancel() {
       this.showModal = false;
     },
@@ -140,7 +160,8 @@ export default {
   width: 10rem;
 }
 .filter,
-.search {
-  margin-top: -112px;
+.search-input {
+  margin-top: -118px;
+  background-color: transparent;
 }
 </style>
