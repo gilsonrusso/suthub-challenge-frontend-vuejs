@@ -1,20 +1,18 @@
 <template>
   <div class="container">
     <Modal v-if="showModal">
-      <Form
-        @save="create"
-        @cancel="cancel"
-        :data="pet"
-        @search="searchCode"
-        :typeOf="typeOfPet"
-        :breeds="pet.typeOf === 'Gato' ? catBreeds : dogBreeds"
-      />
+      <Card>
+        <Form
+          @save="create"
+          @cancel="cancel"
+          :data="pet"
+          @search="searchCode"
+        />
+      </Card>
     </Modal>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">
-          Pets
-        </li>
+        <li class="breadcrumb-item active" aria-current="page">Pets</li>
       </ol>
     </nav>
     <v-divider></v-divider>
@@ -26,19 +24,22 @@
 
 <script>
 import Modal from "../../components/Modal";
+import Card from "../../components/Card";
 import Form from "./Form.vue";
 import { search } from "../../services/cepServices";
 export default {
   name: "pets-page",
-  components: { Modal, Form },
+  components: { Modal, Form, Card },
   data() {
     return {
       showModal: false,
       pet: {
         name: "",
-        birthDate: "",
+        birthDay: new Date().toISOString().substr(0, 10),
         cpf: "",
         income: "1000,00",
+        typeOfPet: "",
+        breed:"",
         address: {
           code: "",
           address: "",
@@ -48,16 +49,7 @@ export default {
         },
       },
       listPets: [],
-      typeOfPet: ["Cão", "Gato"],
-      dogBreeds: [
-        "Pastor-alemão",
-        "Buldogue",
-        "Labrador",
-        "Poodle",
-        "Maltês",
-        "Outro",
-      ],
-      catBreeds: ["Siamês", "Ragdoll", "Persa", "Bombaim", "Angorá", "Outro"],
+      
     };
   },
   methods: {
@@ -73,7 +65,7 @@ export default {
     resetPet() {
       this.pet = {
         name: "",
-        birthDate: "",
+        birthDay: "",
         cpf: "",
         income: "1000,00",
         address: {

@@ -1,307 +1,309 @@
 <template>
-  <form @submit.prevent="save" class="form">
-    <div class="header">Novo Cadastro</div>
+  <v-form ref="form" v-model="valid" lazy-validation>
+    <v-card-text class="p-0">Cadastro de Pet</v-card-text>
     <v-divider></v-divider>
-    <!-- FULL NAME -->
-    <div class="row">
-      <div class="col-7 py-1">
-        <div class="mb-3">
-          <label for="inputName" class="input-label">Nome completo</label>
-          <input
-            v-model="data.name"
-            type="text"
-            class="form-control"
-            id="inputName"
-            placeholder="Nome completo"
-            minlength="8"
-            maxlength="20"
-            required
-            :class="nameValid"
-          />
-        </div>
-      </div>
-
-      <div class="col-5 py-1">
-        <div class="mb-3">
-          <label for="inputBirthDate" class="input-label"
-            >Data Nascimento</label
-          >
-          <input
-            v-model="data.birthDate"
-            type="date"
-            class="form-control"
-            id="inputBirthDate"
-            minlength="18"
-            maxlength="65"
-            required
-          />
-        </div>
-      </div>
-    </div>
-    <!-- BIRTHDATE AND CPF -->
-    <div class="row">
-      <div class="col-7 py-1">
-        <div class="mb-1">
-          <label for="inputCPF" class="input-label">CPF</label>
-          <input
-            v-model="data.cpf"
-            type="text"
-            class="form-control"
-            id="inputCPF"
-            v-mask="'###.###.###-##'"
-            placeholder="999.999.999-99"
-            minlength="14"
-            maxlength="14"
-            required
-          />
-        </div>
-      </div>
-      <div class="col-5 py-1">
-        <label for="inputIncome" class="input-label">Renda Mensal</label>
-        <div class="mb-1 input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">R$:</span>
-          </div>
-          <input
-            v-model="data.income"
-            type="text"
-            class="form-control"
-            id="inputIncome"
-            v-mask="'#####.##'"
-            minlength="6"
-            maxlength="10"
-            required
-          />
-        </div>
-      </div>
-    </div>
-    <!-- ADDRESS -->
-    <div class="row">
-      <div class="col-5 py-1">
-        <label for="inputCode" class="input-label">CEP</label>
-        <div class="mb-3 input-group">
-          <input
-            v-model="data.address.code"
-            type="text"
-            v-mask="'XXXXX-XXX'"
-            class="form-control"
-            id="inputCode"
-            placeholder="69000-000"
-            minlength="9"
-            maxlength="9"
-            required
-          />
-          <div class="input-group-prepend">
-            <button
-              :disabled="codeValid"
-              :class="codeValid ? 'btn-second' : 'btn-success'"
-              class="input-group-text"
-              @click="search"
+    <v-row>
+      <v-col>
+        <v-text-field
+          dense
+          label="Name"
+          v-model="data.name"
+          type="text"
+          required
+          :counter="30"
+          minlength="8"
+          maxlength="30"
+          :rules="nameRules"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="4">
+        <v-menu
+          v-model="menu2"
+          :close-on-content-click="false"
+          transition="scale-transition"
+          offset-y
+          max-width="290px"
+          min-width="auto"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              dense
+              label="Nascimento"
+              v-model="computedDateFormatted"
+              prepend-icon="mdi-calendar"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="data.birthDay"
+            no-title
+            @input="menu2 = false"
+          ></v-date-picker>
+        </v-menu>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-text-field
+          dense
+          label="CPF"
+          v-model="data.cpf"
+          required
+          :counter="14"
+          minlength="14"
+          maxlength="14"
+          v-mask="'###.###.###-##'"
+          :rules="[(cpfRules && computedCpf) || 'Número de CPF Inválido!']"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="4">
+        <v-text-field
+          prepend-icon="mdi-currency-brl"
+          dense
+          v-model="data.income"
+          v-mask="'######,##'"
+          :counter="9"
+          minlength="4"
+          maxlength="9"
+          label="Renda Mensal"
+          required
+          :rules="incomeRules"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="6" md="4">
+        <v-text-field
+          dense
+          label="CEP"
+          v-model="data.address.code"
+          :counter="9"
+          required
+          minlength="9"
+          maxlength="9"
+          v-mask="'XXXXX-XXX'"
+          :rules="codeRules"
+        >
+          <v-btn small slot="append">
+            <v-icon
+              color="green"
+              :disabled="data.address.code.length < 9 ? true : false"
+              dense
             >
-              <i class="fas fa-search text-white fa-1x"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="col-7 py-1">
-        <div class="mb-3">
-          <label for="inputStreet" class="input-label">Rua</label>
-          <input
-            v-model="data.address.address"
-            type="text"
-            class="form-control"
-            id="inputStreet"
-            placeholder="Nome da rua"
-            required
-            readonly
-          />
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-4 py-1">
-        <div class="mb-3">
-          <label for="inputDistrict" class="input-label">Bairro</label>
-          <input
-            v-model="data.address.district"
-            type="text"
-            class="form-control"
-            id="inputDistrict"
-            placeholder="Bairro"
-            required
-            readonly
-          />
-        </div>
-      </div>
-      <div class="col-6 py-1">
-        <div class="mb-3">
-          <label for="inputCity" class="input-label">Cidade</label>
-          <input
-            v-model="data.address.city"
-            type="text"
-            class="form-control"
-            id="inputCity"
-            placeholder="Cidade"
-            required
-            readonly
-          />
-        </div>
-      </div>
-      <div class="col-2 py-1">
-        <div class="mb-3">
-          <label for="inputState" class="input-label">Estado</label>
-          <input
-            v-model="data.address.state"
-            type="text"
-            class="form-control"
-            id="inputState"
-            placeholder="UF"
-            required
-            readonly
-          />
-        </div>
-      </div>
-    </div>
-    <!-- KIND OF PET -->
-    <div class="row">
-      <div class="col-3 py-1">
-        <div class="mb-1">
-          <label for="inputKindOf" class="input-label">Tipo de Pet</label>
-          <v-select
-            v-model="data.typeOf"
-            :items="typeOf"
-            label="Escolha"
-            dense
-            solo
-          ></v-select>
-        </div>
-      </div>
-      <div class="col-5 py-1">
-        <div class="mb-1">
-          <label for="inputTypeOf" class="input-label">Raça do Pet</label>
-          <v-select
-            :disabled="!data.typeOf"
-            v-model="data.breed"
-            :items="breeds"
-            label="Escolha"
-            dense
-            solo
-          ></v-select>
-        </div>
-      </div>
-      <div class="col-4 py-1" v-if="data.breed === 'Outro'">
-        <div class="mb-1">
-          <label for="inputOtheBreed" class="input-label">Qual a Raça?</label>
-          <input
-            v-model="data.otherBreed"
-            type="text"
-            class="form-control"
-            id="inputOtherBreed"
-            placeholder="Digite a Raça"
-            minlength="15"
-            maxlength="25"
-            required
-          />
-        </div>
-      </div>
-    </div>
+              fas fa-search
+            </v-icon></v-btn
+          >
+        </v-text-field>
+      </v-col>
+      <v-col>
+        <v-text-field
+          dense
+          label="Rua"
+          type="text"
+          v-model="data.address.address"
+          required
+          :counter="30"
+          minlength="11"
+          maxlength="30"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="6" md="4">
+        <v-text-field
+          dense
+          label="Bairro"
+          type="text"
+          v-model="data.address.district"
+          required
+          :counter="20"
+          minlength="5"
+          maxlength="20"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6" md="4">
+        <v-text-field
+          dense
+          label="Cidade"
+          type="text"
+          v-model="data.address.city"
+          required
+          :counter="20"
+          minlength="5"
+          maxlength="20"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="4" md="2">
+        <v-text-field
+          dense
+          label="UF"
+          v-model="data.address.state"
+          required
+          :counter="2"
+          minlength="2"
+          maxlength="2"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="6" md="4">
+        <v-select
+          dense
+          label="Tipo de Animal"
+          required
+          v-model="data.typeOfPet"
+          :items="typeOfPet"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-select>
+      </v-col>
+      <v-col cols="12" sm="6" md="4">
+        <v-select
+          dense
+          label="Raça"
+          v-model="data.breed"
+          required
+          :items="data.typeOfPet == 'Gato' ? catBreeds : dogBreeds"
+          :disabled="data.typeOfPet == ''"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-select>
+      </v-col>
+      <v-col cols="12" sm="6" md="4">
+        <v-text-field
+          v-if="data.breed == 'Outras'"
+          dense
+          label="Outra Raça"
+          v-model="data.otherBreed"
+          required
+          :counter="11"
+          minlength="5"
+          maxlength="11"
+          :rules="[(v) => !!v || 'Campo Requerido!']"
+        ></v-text-field>
+      </v-col>
+    </v-row>
     <v-divider></v-divider>
-    <div class="footer">
-      <button @click="cancel" class="btn btn-cancel">Cancel</button>
-      <button type="submit" class="btn btn-save">Save</button>
-    </div>
-  </form>
+    <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
+      Validate
+    </v-btn>
+
+    <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
+
+    <v-btn color="warning" @click="resetValidation"> Reset Validation </v-btn>
+  </v-form>
 </template>
 
 <script>
+import moment from "moment";
 import { mask } from "vue-the-mask";
 import { isValidCPF } from "../../config/validatorCpf";
 export default {
   directives: { mask },
-  name: "form-pets",
-  props: ["data", "typeOf", "breeds"],
-  data() {
-    return {
-      nameIsValid: false,
-    };
-  },
+  props: ["data"],
+  data: () => ({
+    menu2: false,
+    valid: true,
+    typeOfPet: ["Cão", "Gato"],
+    dogBreeds: [
+      "Pastor-alemão",
+      "Buldogue",
+      "Labrador",
+      "Poodle",
+      "Maltês",
+      "Outras",
+    ],
+    catBreeds: ["Siamês", "Ragdoll", "Persa", "Bombaim", "Angorá", "Outras"],
+    // ageIsValid: true,
+    // cpfIsValid: false,
+    nameRules: [
+      (v) => !!v || "Nome é Obrigatório!",
+      (v) => (v && v.length >= 8) || "Nome tem que ser maior que 8 caracteres!",
+    ],
+    cpfRules: [
+      (v) => !!v || "CPF é Obrigatório!",
+      (v) => (v && v.length == 14) || "CPF tem que ter 14 caracteres!",
+    ],
+    incomeRules: [
+      (v) => !!v || "Renda Mensal Obrigatória!",
+      (v) => (v && v.length >= 4) || "No mínimo 1000 reais!",
+    ],
+    codeRules: [
+      (v) => !!v || "CEP é Obrigatório!",
+      (v) => (v && v.length >= 9) || "CEP tem que ter 9 caracteres!",
+    ],
+    select: null,
+    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    checkbox: false,
+  }),
+
   methods: {
-    save() {
-      this.$emit("save");
+    validate() {
+      this.$refs.form.validate();
     },
-    cancel() {
-      this.$emit("cancel");
+    reset() {
+      this.$refs.form.reset();
     },
-    search() {
-      this.$emit("search");
+    resetValidation() {
+      this.$refs.form.resetValidation();
     },
-    checkName() {
-      return this.data.name.length > 8
-        ? (this.nameIsValid = false)
-        : (this.nameIsValid = true);
+    formatDate() {
+      this.date.birthDay = moment(this.data.birthDay).format("DD/MM/YYYY");
+    },
+    ageValid() {
+      const today = moment();
+      const birthYear = moment(this.data.birthDay);
+
+      console.log(today.diff(birthYear, "years"));
     },
     checkCPF() {
-      isValidCPF(this.data.cpf);
+      const result = isValidCPF(this.data.cpf);
+      return result;
     },
+    // checkCEP() {
+    //   const obj = /^\d{5}-\d{3}$/;
+    //   // const obj = /^[0-9]{2}.[0-9]{3}-[0-9]{3}$/;
+    //   return this.data.address.code.length > 0 && obj.test(this.dada.address.code)
+    //     ? true
+    //     : false;
+    // },
+  },
+  watch: {
+    ["data.birthDay"]: function () {
+      this.ageValid();
+    },
+    ["data.cpf"]: function () {
+      this.checkCPF();
+    },
+    // ["data.code"]: function () {
+    //   this.checkCEP();
+    // },
   },
   computed: {
-    nameValid: function () {
-      return this.checkName();
+    computedDateFormatted() {
+      return moment(this.data.birthDay).format("DD/MM/YYYY");
     },
-    codeValid: function () {
-      return this.data.address.code.length < 9 ? true : false;
+    computedCpf() {
+      return this.checkCPF();
+    },
+    computedCEP() {
+      return this.checkCEP();
     },
   },
 };
 </script>
 
 <style scoped>
-.form {
-  height: 35rem;
-  width: 30rem;
-  min-width: 360px;
+.v-form {
   background-color: #fff;
-  padding: 15px;
 }
 
-.header {
-  font-weight: bold;
-}
-.input-label {
-  font-size: 0.7rem;
-  color: var(--text-color);
-}
-.footer {
-  display: flex;
-  justify-content: space-between;
-}
-
-.footer .btn {
-  width: 6.25rem;
-}
-
-.btn {
-  color: #fff;
-}
-.btn-save {
-  background-color: var(--second-color);
-}
-.btn-cancel {
-  background-color: var(--text-color);
-}
-.btn:hover {
-  opacity: 90%;
-}
-
-.fas {
-  height: 24px;
-  display: flex;
-  align-items: center;
-}
-
-.alert {
-  padding: 0;
-  font-size: 0.6rem;
-  color: red;
+.invalid {
+  border: 1px solid red;
 }
 </style>
