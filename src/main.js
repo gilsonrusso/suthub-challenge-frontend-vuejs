@@ -5,7 +5,7 @@ import vuetify from './plugins/vuetify'
 import "./plugins/bootstrapPlugin";
 import "./plugins/fontawesomePlugin";
 import "./styles/global.css";
-
+import "./plugins/momentPlugin";
 import router from "./config/router";
 
 Vue.config.productionTip = false
