@@ -12,6 +12,7 @@
       </ol>
     </nav>
 
+    <v-divider></v-divider>
     <v-row class="d-flex justify-content-end">
       <v-col cols="12" xs="12" sm="12" md="3" lg="3" class="search">
         <v-card class="pa-0 search-input" flat>
@@ -40,7 +41,6 @@
         ></v-select>
       </v-col>
     </v-row>
-    <v-divider></v-divider>
     <button @click="getBrazilData" class="btn">Brasil</button>
 
     <v-row>
@@ -183,7 +183,15 @@ export default {
 }
 .filter,
 .search-input {
-  margin-top: -118px;
+  margin-top: -135px;
   background-color: transparent;
+}
+
+@media (max-width: 769px) {
+  .filter,
+  .search-input {
+    margin-top: 0;
+    background-color: transparent;
+  }
 }
 </style>
