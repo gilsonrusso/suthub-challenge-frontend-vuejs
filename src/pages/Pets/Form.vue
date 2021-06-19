@@ -34,10 +34,15 @@
               readonly
               v-bind="attrs"
               v-on="on"
+              :rules="[
+                (dateRules && computedAgeValid) ||
+                  'Permitido entre 18 e 65 anos.',
+              ]"
             ></v-text-field>
           </template>
           <v-date-picker
             v-model="data.birthDay"
+            required
             no-title
             @input="menu2 = false"
           ></v-date-picker>
@@ -86,14 +91,13 @@
           v-mask="'XXXXX-XXX'"
           :rules="codeRules"
         >
-          <v-btn small slot="append">
-            <v-icon
-              color="green"
-              :disabled="data.address.code.length < 9 ? true : false"
-              dense
-            >
-              fas fa-search
-            </v-icon></v-btn
+          <v-btn
+            small
+            slot="append"
+            :disabled="data.address.code.length < 9 ? true : false"
+            @click="searchCEP"
+          >
+            <v-icon dense color="green"> fas fa-search </v-icon></v-btn
           >
         </v-text-field>
       </v-col>
@@ -125,7 +129,7 @@
           :rules="[(v) => !!v || 'Campo Requerido!']"
         ></v-text-field>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" sm="6" md="5">
         <v-text-field
           dense
           label="Cidade"
@@ -138,7 +142,7 @@
           :rules="[(v) => !!v || 'Campo Requerido!']"
         ></v-text-field>
       </v-col>
-      <v-col cols="12" sm="4" md="2">
+      <v-col cols="12" sm="4" md="3">
         <v-text-field
           dense
           label="UF"
@@ -189,13 +193,14 @@
       </v-col>
     </v-row>
     <v-divider></v-divider>
-    <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
-      Validate
-    </v-btn>
-
-    <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
-
-    <v-btn color="warning" @click="resetValidation"> Reset Validation </v-btn>
+    <v-row>
+      <v-col cols="12" sm="6" md="6">
+        <v-btn @click="cancel"> Cancelar </v-btn>
+      </v-col>
+      <v-col cols="12" sm="6" md="6">
+        <v-btn @click.prevent="save"> Salvar </v-btn>
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
@@ -219,8 +224,6 @@ export default {
       "Outras",
     ],
     catBreeds: ["Siamês", "Ragdoll", "Persa", "Bombaim", "Angorá", "Outras"],
-    // ageIsValid: true,
-    // cpfIsValid: false,
     nameRules: [
       (v) => !!v || "Nome é Obrigatório!",
       (v) => (v && v.length >= 8) || "Nome tem que ser maior que 8 caracteres!",
@@ -237,17 +240,22 @@ export default {
       (v) => !!v || "CEP é Obrigatório!",
       (v) => (v && v.length >= 9) || "CEP tem que ter 9 caracteres!",
     ],
-    select: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox: false,
+    dateRules: [
+      (v) => !!v || "Data é Obrigatório!",
+      (v) => (v && v.length == 10) || "Data tem que ter 10 caracteres!",
+    ],
   }),
 
   methods: {
-    validate() {
+    save() {
       this.$refs.form.validate();
+      if (this.valid) {
+        this.$emit("save");
+      }
     },
-    reset() {
+    cancel() {
       this.$refs.form.reset();
+      this.$emit("cancel");
     },
     resetValidation() {
       this.$refs.form.resetValidation();
@@ -255,38 +263,38 @@ export default {
     formatDate() {
       this.date.birthDay = moment(this.data.birthDay).format("DD/MM/YYYY");
     },
-    ageValid() {
+    ageIsValid() {
       const today = moment();
       const birthYear = moment(this.data.birthDay);
+      const value = today.diff(birthYear, "years");
 
-      console.log(today.diff(birthYear, "years"));
+      if (value >= 18 && value <= 65) {
+        return true;
+      }
+      return false;
     },
     checkCPF() {
       const result = isValidCPF(this.data.cpf);
       return result;
     },
-    // checkCEP() {
-    //   const obj = /^\d{5}-\d{3}$/;
-    //   // const obj = /^[0-9]{2}.[0-9]{3}-[0-9]{3}$/;
-    //   return this.data.address.code.length > 0 && obj.test(this.dada.address.code)
-    //     ? true
-    //     : false;
-    // },
+    searchCEP() {
+      this.$emit("search");
+    },
   },
   watch: {
     ["data.birthDay"]: function () {
-      this.ageValid();
+      this.ageIsValid();
     },
     ["data.cpf"]: function () {
       this.checkCPF();
     },
-    // ["data.code"]: function () {
-    //   this.checkCEP();
-    // },
   },
   computed: {
     computedDateFormatted() {
-      return moment(this.data.birthDay).format("DD/MM/YYYY");
+      return moment(this.data.birthDay).format("DD/MM/YYYY") || '0000-00-00';
+    },
+    computedAgeValid() {
+      return this.ageIsValid();
     },
     computedCpf() {
       return this.checkCPF();
@@ -300,10 +308,6 @@ export default {
 
 <style scoped>
 .v-form {
-  background-color: #fff;
-}
-
-.invalid {
-  border: 1px solid red;
+  width: 100%;
 }
 </style>

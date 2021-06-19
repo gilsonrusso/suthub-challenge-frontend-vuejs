@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseUrl = "https://ws.apicep.com/cep/";
 
-async function search(code) {
+async function searchCEP(code) {
   const { data } = await axios.get(
     `${baseUrl}${code}.json`
   );
@@ -10,4 +10,4 @@ async function search(code) {
   return data;
 }
 
-export { search }
+export { searchCEP }

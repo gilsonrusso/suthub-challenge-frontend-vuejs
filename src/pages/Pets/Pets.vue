@@ -26,7 +26,7 @@
 import Modal from "../../components/Modal";
 import Card from "../../components/Card";
 import Form from "./Form.vue";
-import { search } from "../../services/cepServices";
+import { searchCEP } from "../../services/cepServices";
 export default {
   name: "pets-page",
   components: { Modal, Form, Card },
@@ -35,12 +35,13 @@ export default {
       showModal: false,
       pet: {
         name: "",
-        birthDay: new Date().toISOString().substr(0, 10),
+        birthDay: "",
+        // birthDay: new Date(),
+        // birthDay: new Date().toISOString().substr(0, 10),
         cpf: "",
-        income: "1000,00",
+        income: "",
         typeOfPet: "",
-        breed:"",
-        otherBreed:"",
+        breed: "",
         address: {
           code: "",
           address: "",
@@ -50,7 +51,6 @@ export default {
         },
       },
       listPets: [],
-      
     };
   },
   methods: {
@@ -79,9 +79,11 @@ export default {
       };
     },
     async searchCode() {
-      const result = await search(this.pet.address.code);
-      if (result.status == 200) {
-        this.pet.address = { ...result };
+      const { code, state, city, district, address, status } = await searchCEP(
+        this.pet.address.code
+      );
+      if (status == 200) {
+        this.pet.address = { code, state, city, district, address };
       }
     },
   },
