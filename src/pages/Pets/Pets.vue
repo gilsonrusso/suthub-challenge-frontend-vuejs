@@ -40,6 +40,7 @@ export default {
         income: "1000,00",
         typeOfPet: "",
         breed:"",
+        otherBreed:"",
         address: {
           code: "",
           address: "",
