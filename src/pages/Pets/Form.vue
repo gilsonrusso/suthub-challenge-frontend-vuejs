@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form" v-model="valid" lazy-validation>
-    <v-card-text class="p-0">Cadastro de Pet</v-card-text>
+    <v-card-title class="p-0">Cadastro de Pet</v-card-title>
     <v-divider></v-divider>
     <v-row>
       <v-col>
@@ -194,11 +194,11 @@
     </v-row>
     <v-divider></v-divider>
     <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <v-btn @click="cancel"> Cancelar </v-btn>
+      <v-col class="d-flex justify-content-center" cols="12" sm="6" md="6">
+        <v-btn class="cancel" color="lighten-2" @click="cancel"> Cancelar </v-btn>
       </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-btn @click.prevent="save"> Salvar </v-btn>
+      <v-col class="d-flex justify-content-center" cols="12" sm="6" md="6">
+        <v-btn class="save" @click="save"> Salvar </v-btn>
       </v-col>
     </v-row>
   </v-form>
@@ -291,7 +291,7 @@ export default {
   },
   computed: {
     computedDateFormatted() {
-      return moment(this.data.birthDay).format("DD/MM/YYYY") || '0000-00-00';
+      return moment(this.data.birthDay).format("DD/MM/YYYY") || "0000-00-00";
     },
     computedAgeValid() {
       return this.ageIsValid();
@@ -309,5 +309,15 @@ export default {
 <style scoped>
 .v-form {
   width: 100%;
+}
+.v-btn {
+  color: #fff;
+  width: 50%;
+}
+.save {
+  background-color: var(--second-color) !important;
+}
+.cancel {
+  background-color: var(--main-color) !important;
 }
 </style>
