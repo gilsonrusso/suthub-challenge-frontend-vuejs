@@ -3,7 +3,7 @@
     <header>
       <!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
 
-      <v-app-bar color="grey lighten-5 accent-4" dark>
+      <v-app-bar fixed color="grey lighten-5 accent-4" dark>
         <v-app-bar-nav-icon
           color="green darken-2"
           @click.stop="drawer = !drawer"
