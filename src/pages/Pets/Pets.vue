@@ -10,13 +10,8 @@
         />
       </Card>
     </Modal>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Pets</li>
-      </ol>
-    </nav>
-    <v-divider></v-divider>
-    <button @click="showModal = !showModal" class="btn">Novo Pet</button>
+
+    <button @click="showModal = !showModal" class="btn btnAddPet">Novo Pet</button>
   </div>
 </template>
 
@@ -90,18 +85,18 @@ export default {
 </script>
 
 <style scoped>
-.menu {
-  margin-top: 15px;
-  margin-left: 15px;
-}
-.btn {
+
+.btnAddPet {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
   background-color: var(--second-color);
   color: #ffffff;
   transition: all 0.1s ease;
+  margin-top: 70px;
+  height: 48px;
+  width: 10rem;
 }
 
-.btn:hover {
+.btnAddPet:hover {
   opacity: 90%;
 }
 </style>
