@@ -146,15 +146,11 @@
           dense
           label="UF"
           v-model="data.address.state"
-          @input="
-            (v) => {
-              data.address.state = v.toUpperCase();
-            }
-          "
           required
           :counter="2"
           minlength="2"
           maxlength="2"
+          v-mask="'AA'"
           :rules="[(v) => !!v || 'Campo Requerido!']"
         ></v-text-field>
       </v-col>
@@ -233,6 +229,7 @@ export default {
     nameRules: [
       (v) => !!v || "Nome é Obrigatório!",
       (v) => (v && v.length >= 8) || "Nome tem que ser maior que 8 caracteres!",
+      (v) => /[A-Z][a-z]* [A-Z][a-z]*/.test(v) || "Formato Aceito: Nome Sobrenome",
     ],
     cpfRules: [
       (v) => !!v || "CPF é Obrigatório!",
