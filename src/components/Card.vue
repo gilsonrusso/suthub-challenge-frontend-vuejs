@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto px-5 py-5">
+  <v-card v-scroll.self="onScroll" class="mx-auto overflow-y-auto px-5 py-5">
     <slot></slot>
   </v-card>
 </template>
@@ -12,16 +12,15 @@ export default {
 
 <style scoped>
 .v-card {
-  min-height: 550px;
+  min-height: 300px;
   width: 500px;
   display: flex;
   flex-direction: column;
-  
 }
 
 @media (max-width: 576px) {
   .v-card {
-    min-width: 360px;
+    /* min-width: 360px; */
     height: 100%;
     width: 100%;
   }
