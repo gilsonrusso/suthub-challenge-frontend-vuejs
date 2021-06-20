@@ -21,7 +21,7 @@
       </v-simple-table>
     </div>
     <v-divider></v-divider>
-    <button @click="cancel" class="btn btnClose">Close</button>
+    <button @click="cancel" class="btn btnClose">Fechar</button>
   </div>
 </template>
 
