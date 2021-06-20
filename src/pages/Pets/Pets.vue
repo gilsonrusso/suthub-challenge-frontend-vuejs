@@ -17,7 +17,7 @@
     </nav>
     <v-divider></v-divider>
     <button @click="showModal = !showModal" class="btn">
-      Novo Cadastro Pet
+      Novo Pet
     </button>
   </div>
 </template>
@@ -35,11 +35,9 @@ export default {
       showModal: false,
       pet: {
         name: "",
-        birthDay: "",
-        // birthDay: new Date(),
-        // birthDay: new Date().toISOString().substr(0, 10),
+        birthDay: null,
         cpf: "",
-        income: "",
+        income: null,
         typeOfPet: "",
         breed: "",
         address: {
@@ -66,9 +64,9 @@ export default {
     resetPet() {
       this.pet = {
         name: "",
-        birthDay: "",
+        birthDay: null,
         cpf: "",
-        income: "1000,00",
+        income: null,
         address: {
           code: "",
           address: "",
