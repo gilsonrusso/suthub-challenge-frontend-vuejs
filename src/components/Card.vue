@@ -7,6 +7,15 @@
 <script>
 export default {
   name: "card",
+  data: () => ({
+    scrollInvoked: 0,
+  }),
+
+  methods: {
+    onScroll() {
+      this.scrollInvoked++;
+    },
+  },
 };
 </script>
 
