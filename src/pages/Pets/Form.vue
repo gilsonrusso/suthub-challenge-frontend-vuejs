@@ -18,7 +18,7 @@
       </v-col>
       <v-col cols="12" sm="6" md="4">
         <v-menu
-          v-model="menu2"
+          v-model="menuCalendar"
           :close-on-content-click="false"
           transition="scale-transition"
           offset-y
@@ -28,12 +28,12 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               dense
-              label="Nascimento"
-              v-model="computedDateFormatted"
-              prepend-icon="mdi-calendar"
+              :value="formattedDate"
+              v-on="on"
               readonly
               v-bind="attrs"
-              v-on="on"
+              label="Data Nascimento"
+              prepend-icon="mdi-calendar"
               :rules="[
                 (dateRules && computedAgeValid) ||
                   'Permitido entre 18 e 65 anos.',
@@ -42,9 +42,8 @@
           </template>
           <v-date-picker
             v-model="data.birthDay"
-            required
             no-title
-            @input="menu2 = false"
+            @input="menuCalendar = false"
           ></v-date-picker>
         </v-menu>
       </v-col>
@@ -147,6 +146,11 @@
           dense
           label="UF"
           v-model="data.address.state"
+          @input="
+            (v) => {
+              data.address.state = v.toUpperCase();
+            }
+          "
           required
           :counter="2"
           minlength="2"
@@ -195,7 +199,9 @@
     <v-divider></v-divider>
     <v-row>
       <v-col class="d-flex justify-content-center" cols="12" sm="6" md="6">
-        <v-btn class="cancel" color="lighten-2" @click="cancel"> Cancelar </v-btn>
+        <v-btn class="cancel" color="lighten-2" @click="cancel">
+          Cancelar
+        </v-btn>
       </v-col>
       <v-col class="d-flex justify-content-center" cols="12" sm="6" md="6">
         <v-btn class="save" @click="save"> Salvar </v-btn>
@@ -212,7 +218,7 @@ export default {
   directives: { mask },
   props: ["data"],
   data: () => ({
-    menu2: false,
+    menuCalendar: false,
     valid: true,
     typeOfPet: ["Cão", "Gato"],
     dogBreeds: [
@@ -240,16 +246,12 @@ export default {
       (v) => !!v || "CEP é Obrigatório!",
       (v) => (v && v.length >= 9) || "CEP tem que ter 9 caracteres!",
     ],
-    dateRules: [
-      (v) => !!v || "Data é Obrigatório!",
-      (v) => (v && v.length == 10) || "Data tem que ter 10 caracteres!",
-    ],
+    dateRules: [(v) => !!v || "Data é Obrigatória!"],
   }),
 
   methods: {
     save() {
-      this.$refs.form.validate();
-      if (this.valid) {
+      if (this.$refs.form.validate()) {
         this.$emit("save");
       }
     },
@@ -259,9 +261,6 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    },
-    formatDate() {
-      this.date.birthDay = moment(this.data.birthDay).format("DD/MM/YYYY");
     },
     ageIsValid() {
       const today = moment();
@@ -282,16 +281,15 @@ export default {
     },
   },
   watch: {
-    ["data.birthDay"]: function () {
-      this.ageIsValid();
-    },
     ["data.cpf"]: function () {
       this.checkCPF();
     },
   },
   computed: {
-    computedDateFormatted() {
-      return moment(this.data.birthDay).format("DD/MM/YYYY") || "0000-00-00";
+    formattedDate() {
+      return this.data.birthDay
+        ? moment(this.data.birthDay).format("DD/MM/YYYY")
+        : "";
     },
     computedAgeValid() {
       return this.ageIsValid();
