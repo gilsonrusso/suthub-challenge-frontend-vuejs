@@ -1,5 +1,5 @@
 <template>
-  <div class="container card">
+  <div class="container d-flex flex-column justify-content-between">
     <v-card-title> Brasil </v-card-title>
     <v-divider></v-divider>
     <div class="row">
@@ -21,7 +21,7 @@
       </v-simple-table>
     </div>
     <v-divider></v-divider>
-    <button @click="cancel" class="btn">Close</button>
+    <button @click="cancel" class="btn btnClose">Close</button>
   </div>
 </template>
 
@@ -43,36 +43,17 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  height: 35rem;
-  width: 30rem;
-  min-width: 360px;
-  background-color: #fff;
-  padding: 15px;
-}
-
-.header {
-  font-weight: bold;
-}
 .input-label {
   font-size: 0.7rem;
   color: var(--text-color);
 }
-.footer {
-  display: flex;
-  justify-content: space-between;
-}
 
-.footer .btn {
-  width: 6.25rem;
-}
-
-.btn {
+.btnClose {
   background-color: var(--second-color);
   color: #fff;
 }
 
-.btn:hover {
+.btnClose:hover {
   opacity: 90%;
 }
 </style>

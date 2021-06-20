@@ -1,19 +1,16 @@
 <template>
   <div class="container">
-    <Modal v-if="showModal">
-      <FormBrazil @cancel="cancel" :data="brazilData" />
+    <Modal v-if="showModal" class="animationMoveRight">
+      <Card>
+        <FormBrazil @cancel="cancel" :data="brazilData" />
+      </Card>
     </Modal>
-
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">
-          Bloco Regional
-        </li>
-      </ol>
-    </nav>
-
-    <v-divider></v-divider>
-    <v-row class="d-flex justify-content-end animationMoveRight">
+    <v-row class="d-flex justify-content-between mt-15 animationMoveRight">
+      <v-col cols="12" xs="12" sm="12" md="4" lg="4">
+        <button @click="getBrazilData" class="btn btn-brazil animationMoveLeft">
+          Brasil
+        </button>
+      </v-col>
       <v-col cols="12" xs="12" sm="12" md="3" lg="3" class="search">
         <v-card class="pa-0 search-input" flat>
           <v-toolbar dense floating class="w-100">
@@ -41,7 +38,6 @@
         ></v-select>
       </v-col>
     </v-row>
-    <button @click="getBrazilData" class="btn animationMoveLeft">Brasil</button>
 
     <v-row>
       <TableViewer
@@ -63,11 +59,12 @@ import {
   searchByName,
 } from "../../services/restCountriesApiServices";
 import Modal from "../../components/Modal.vue";
+import Card from "../../components/Card.vue";
 import FormBrazil from "./FormBrazil.vue";
 import TableViewer from "../../components/TableViewer.vue";
 export default {
   name: "region-bloc",
-  components: { Modal, FormBrazil, TableViewer },
+  components: { Modal, Card, FormBrazil, TableViewer },
   data() {
     return {
       dataReceived: [],
@@ -177,16 +174,14 @@ export default {
 </script>
 
 <style >
-.btn {
+.btn-brazil {
   background-color: var(--second-color);
   color: #fff;
   width: 10rem;
-  margin-top: -15px;
-  margin-bottom: 10px;
+  height: 48px;
 }
 .filter,
 .search-input {
-  margin-top: -135px;
   background-color: transparent;
 }
 .v-toolbar--dense .v-toolbar__content,
@@ -207,10 +202,8 @@ export default {
     padding: 0 12px;
   }
 
-  .btn {
-    float: right;
-    margin-top: -182px;
-    width: 80px;
+  .btn-brazil {
+    width: 100%;
     transition: all 0.5s ease;
   }
 }
