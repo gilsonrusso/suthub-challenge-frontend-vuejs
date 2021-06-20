@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "node server",
+    "postinstall": "npm run build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "prod_mode": "vue-cli-service serve --mode production",
+    "dev_mode": "vue-cli-service serve --mode development",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -16,7 +20,8 @@
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
     "vue-the-mask": "^0.11.1",
-    "vuetify": "^2.4.0"
+    "vuetify": "^2.4.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
