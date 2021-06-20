@@ -96,7 +96,4 @@ export default {
   width: 10rem;
 }
 
-.btnAddPet:hover {
-  opacity: 90%;
-}
 </style>

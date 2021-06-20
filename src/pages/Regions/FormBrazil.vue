@@ -53,7 +53,4 @@ export default {
   color: #fff;
 }
 
-.btnClose:hover {
-  opacity: 90%;
-}
 </style>
