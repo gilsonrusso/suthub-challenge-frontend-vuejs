@@ -16,9 +16,7 @@
       </ol>
     </nav>
     <v-divider></v-divider>
-    <button @click="showModal = !showModal" class="btn">
-      Novo Pet
-    </button>
+    <button @click="showModal = !showModal" class="btn">Novo Pet</button>
   </div>
 </template>
 
@@ -27,6 +25,7 @@ import Modal from "../../components/Modal";
 import Card from "../../components/Card";
 import Form from "./Form.vue";
 import { searchCEP } from "../../services/cepServices";
+import moment from "moment";
 export default {
   name: "pets-page",
   components: { Modal, Form, Card },
@@ -48,13 +47,15 @@ export default {
           state: "",
         },
       },
-      listPets: [],
     };
   },
   methods: {
     create() {
-      console.log(JSON.stringify(this.pet));
-      this.listPets.push(this.pet);
+      const objModify = {
+        ...this.pet,
+        birthDay: moment(this.pet.birthDay).format("DD/MM/YYYY"),
+      };
+      console.log(JSON.stringify(objModify));
       this.showModal = false;
       this.resetPet();
     },
