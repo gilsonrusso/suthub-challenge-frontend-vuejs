@@ -1,5 +1,5 @@
 <template>
-  <v-card v-scroll.self="onScroll" class="mx-auto overflow-y-auto px-5 py-5">
+  <v-card v-scroll.self="onScroll" class="mx-auto overflow-y-auto px-5 py-5 animationMoveRight">
     <slot></slot>
   </v-card>
 </template>

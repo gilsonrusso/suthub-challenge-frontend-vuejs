@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="300">
+  <v-card class="mx-auto animationMoveLeft" max-width="300">
     <v-img class="white--text align-end image" height="200px" :src="data.img">
       <v-card-title>{{ data.title }}</v-card-title>
     </v-img>

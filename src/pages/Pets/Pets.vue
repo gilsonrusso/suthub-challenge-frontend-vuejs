@@ -11,7 +11,7 @@
       </Card>
     </Modal>
 
-    <button @click="showModal = !showModal" class="btn btnAddPet">Novo Pet</button>
+    <button @click="showModal = !showModal" class="btn btnAddPet animationMoveLeft">Novo Pet</button>
   </div>
 </template>
 
